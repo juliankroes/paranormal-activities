@@ -50,13 +50,6 @@ export default class RoomController {
       this.roomService.addPlayerToRoom(player, room)
       this.connectionService.connectPlayer(player, socket)
       this.connectionService.broadcastGameInformation(room)
-
-      const message: BroadcastMessage = {
-        event: "update-self",
-        player: player,
-      }
-      const jsonMessage: string = JSON.stringify(message)
-      this.connectionService.broadcastToPlayer(jsonMessage, socket)
     } catch (error: unknown) {
       if (error instanceof ReferenceError) {
         this.broadcastErrorToPlayer(error.message, socket)

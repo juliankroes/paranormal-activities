@@ -35,7 +35,7 @@ const VoteComponent: React.FC<VoteComponentProps> = (props) => {
     
     const handleSubmit = () => {
         if (selectedPlayer) {
-            
+            props.onSubmit(selectedPlayer)
         }
     }
 

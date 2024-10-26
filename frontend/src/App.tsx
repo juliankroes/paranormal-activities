@@ -2,13 +2,11 @@ import { ReactNode, useEffect, useState } from "react";
 import "./App.css";
 import JoinRoomDetails from "./models/JoinRoomDetails.model.ts";
 import useWebSocket from "react-use-websocket";
-import PlayerList from "./components/PlayerList.tsx";
 import MessageData from "./types/messageData.ts";
 import Room from "./models/Room.model.ts";
 import Start from "./pages/Start.tsx";
 import InputMessage from "./components/InputMessage.tsx";
 import VoteComponent from "./components/VoteComponent.tsx";
-import Player from "./models/Player.model.ts";
 
 enum GameState {
   Joining,
@@ -64,12 +62,8 @@ export const App: React.FC = () => {
   const voteHandler = (playerName: string) => {
     console.log(`sending: ${playerName}`)
     sendMessage(JSON.stringify({event: "vote-answer", playerName: playerName}))
+    setGameComponent('')
   }
-
-  const samplePlayerList: Player[] = []
-  samplePlayerList.push(new Player('dragon', '1', true))
-  samplePlayerList.push(new Player('dino', '2', false))
-  samplePlayerList.push(new Player('basilisk', '3', false))
 
   // switch satement with all possible messages from backend
   useEffect(() => {
