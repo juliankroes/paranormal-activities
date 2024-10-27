@@ -1,3 +1,7 @@
 .logo {
     width: clamp(200px, 100%, 500px);
 }
+.container {
+    margin-top: 2rem;
+    text-align: center;
+}

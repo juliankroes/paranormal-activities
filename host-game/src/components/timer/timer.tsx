@@ -5,12 +5,12 @@ const Timer: React.FC<{ duration: number }> = ({ duration }) => {
 
   useEffect(() => {
     setTimeLeft(duration)
-
+  
     if (duration > 0) {
       const timerId = setInterval(() => {
         setTimeLeft(prev => prev - 1)
       }, 1000)
-
+  
       return () => clearInterval(timerId)
     }
   }, [duration])

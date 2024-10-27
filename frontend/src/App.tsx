@@ -62,7 +62,6 @@ export const App: React.FC = () => {
   const voteHandler = (playerName: string) => {
     console.log(`sending: ${playerName}`)
     sendMessage(JSON.stringify({event: "vote-answer", playerName: playerName}))
-    setGameComponent('')
   }
 
   // switch satement with all possible messages from backend

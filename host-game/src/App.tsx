@@ -43,6 +43,7 @@ function App() {
         setRoom(new Room(messageData.room.roomcode, messageData.room.playerList, messageData.room.deviceId));  
       }
       if (messageData.event == 'display') {
+        setTime(null)
         setTime(messageData.time!)
         setText(messageData.text!)
       }

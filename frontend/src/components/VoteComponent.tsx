@@ -6,9 +6,10 @@ interface VoteComponentProps {
     disallowedPlayerNames: string[],
     onSubmit: (playerName: string) => void
 }
-// TODO: voting component should disappear when done voting
+
 const VoteComponent: React.FC<VoteComponentProps> = (props) => {
     const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null)
+    const [submittedPlayer, setSubmittedPlayer] = useState<string | null>(null)
 
     const listPlayers = (playerList: Player[], disallowedPlayerNames: string[]): ReactNode => {
         let playerButtons: ReactNode[] = []
@@ -36,7 +37,12 @@ const VoteComponent: React.FC<VoteComponentProps> = (props) => {
     const handleSubmit = () => {
         if (selectedPlayer) {
             props.onSubmit(selectedPlayer)
+            setSubmittedPlayer(selectedPlayer)
         }
+    }
+
+    if (submittedPlayer) {
+        return (<p>You voted for {submittedPlayer} to be the medium</p>)
     }
 
     return (
