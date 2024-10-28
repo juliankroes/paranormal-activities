@@ -35,11 +35,11 @@ export default class GameLoop {
 
   public async main() {
     const players: Player[] = [...this.room.playerList.values()]
-    await this.explanation(10, players)
-    const medium: Player = await this.voteMedium(25, players)
+    await this.explanation(7, players)
+    const medium: Player = await this.voteMedium(15, players)
     const spirits: Player[] = players.filter((player) => player !== medium) // remove medium from player list
-    const question: string = await this.mediumAnswerPrompt(20, medium)
-    await this.spiritsAnswerPrompt(20, spirits, question)
+    const question: string = await this.mediumAnswerPrompt(15, medium, spirits)
+    await this.spiritsAnswerPrompt(30, spirits, question)
     // displayEncounter(20)
     // mediumInterperatesEncounter(20)
     // displayInterpertation(20)
@@ -81,7 +81,7 @@ export default class GameLoop {
     }
     throw new Error("No player found")
   }
-  private async mediumAnswerPrompt(durationSeconds: number, medium: Player): Promise<string> {
+  private async mediumAnswerPrompt(durationSeconds: number, medium: Player, spirits: Player[]): Promise<string> {
     this.gameService.display(
       `${medium.name}, fill in the blank of the question on your device`,
       this.formattingService.secondsToEndTime(durationSeconds),
@@ -90,6 +90,11 @@ export default class GameLoop {
     const randomPrompt: string = await this.promptService.getRandomPrompt()
     const placeholder: string = "fill in the blank"
 
+    this.gameService.informativeMessage(
+      `Waiting for ${medium.name} to answer the prompt on their device`,
+      this.room.roomcode,
+      this.formattingService.playerListToStringList(spirits)
+    )
     this.gameService.inputMessage(
       randomPrompt,
       placeholder,

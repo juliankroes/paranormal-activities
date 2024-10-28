@@ -44,6 +44,10 @@ export interface AnswerMessage extends BaseMessage {
   event: "answer-prompt"
   answer: string
 }
+export interface VoteAnswer extends BaseMessage {
+  event: "vote-answer"
+  playerName: string
+}
 
 export type Message =
   | StartGameMessage

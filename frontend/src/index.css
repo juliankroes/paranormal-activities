@@ -5,3 +5,16 @@
     margin-top: 2rem;
     text-align: center;
 }
+
+.coll-message-container {
+    width: 90vw;
+    flex-wrap: wrap;
+}
+.coll-message-container > div {
+    padding: .5rem;
+}
+
+.invalid {
+    font-style: italic;
+    color: crimson;
+}

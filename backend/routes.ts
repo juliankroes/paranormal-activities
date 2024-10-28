@@ -1,5 +1,5 @@
 // server.ts
-import { AnswerMessage, CreateRoomMessage, JoinRoomMessage, StartGameMessage } from "./types/messages.ts"
+import { AnswerMessage, CreateRoomMessage, JoinRoomMessage, StartGameMessage, VoteAnswer } from "./types/messages.ts"
 import { Application, Router } from "https://deno.land/x/oak/mod.ts"
 import ConnectionController from "./controllers/connectionController.ts"
 import RoomController from "./controllers/roomController.ts"
@@ -24,6 +24,7 @@ enum MessageType {
   ClearMessage = "clear-message",
   InputMessage = "input-message",
   AnswerPrompt = "answer-prompt",
+  VoteAnswer = "vote-answer",
 }
 
 router.get("/start_player_web_socket", async (ctx) => {
@@ -44,6 +45,10 @@ router.get("/start_player_web_socket", async (ctx) => {
       }
       case MessageType.AnswerPrompt: {
         gameController.answerPrompt(data as AnswerMessage, socket)
+        break
+      }
+      case MessageType.VoteAnswer: {
+        gameController.voteAnswer(data as VoteAnswer, socket)
         break
       }
     }

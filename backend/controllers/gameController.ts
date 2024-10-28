@@ -10,10 +10,12 @@ import {
   InformativeMessage,
   InputMessage,
   StartGameMessage,
+  VoteAnswer,
 } from "../types/messages.ts"
 import { PlayerWebSocket } from "../types/userWebSocket.ts"
 // TODO: export redundant GameController code to a service
 export default class GameController {
+  
   gameService: GameService
   connectionService: ConnectionService
   constructor() {
@@ -55,5 +57,12 @@ export default class GameController {
       connectedGamecode,
     )
     gameLoop.handlePlayerInput(playerWebSocket.player.name, data.answer)
+  }
+  voteAnswer(data: VoteAnswer, playerWebSocket: PlayerWebSocket) {
+    const connectedGamecode: string = playerWebSocket.player.connectedGameCode
+    const gameLoop: GameLoop = this.gameService.getGameLoopInstanceFromRoomcode(
+      connectedGamecode,
+    )
+    
   }
 }

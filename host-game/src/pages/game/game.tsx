@@ -7,7 +7,7 @@ import './game.css'
 
 interface gameProps {
     room: Room,
-    time: number | null,
+    endTime: Date | null,
     text: string
 }
 const Game: React.FC<gameProps> = (props) => {
@@ -22,7 +22,7 @@ const Game: React.FC<gameProps> = (props) => {
     return (
         <div className="game-container">
             <h1>{props.text}</h1>
-            {props.time ? <Timer duration={props.time}/> : null}
+            {props.endTime ? <Timer endTime={props.endTime}/> : null}
         </div>
     )
 }

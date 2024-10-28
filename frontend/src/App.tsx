@@ -7,6 +7,8 @@ import Room from "./models/Room.model.ts";
 import Start from "./pages/Start.tsx";
 import InputMessage from "./components/InputMessage.tsx";
 import VoteComponent from "./components/VoteComponent.tsx";
+import CollaborativeInput from "./components/CollaborativeInput.tsx";
+import Player from "./models/Player.model.ts";
 
 enum GameState {
   Joining,
@@ -115,6 +117,49 @@ export const App: React.FC = () => {
       }
     }
   }, [lastMessage]);
+
+  const sampleOutput = {
+    prompt: "Why are the spirits drawn to my awesome outfit?",
+    fullOutput: [
+      {
+        player: new Player('Alice', 'XXXX', '1', false),
+        output: "Mystical"
+      },
+      {
+        player: new Player('Bob', 'XXXX', '1', false),
+        output: "can't resist"
+      },
+      {
+        player: new Player('Clair', 'XXXX', '1', false),
+        output: "..."
+      },
+      {
+        player: new Player('Dunce', 'XXXX', '1', false),
+        output: "Rizz"
+      },
+      {
+        player: new Player('Eve', 'XXXX', '1', false),
+        output: "that you"
+      },
+      {
+        player: new Player('Floris', 'XXXX', '1', false),
+        output: "radiate"
+      },
+      {
+        player: new Player('Gay tijn', 'XXXX', '1', false),
+        output: "..."
+      },
+      {
+        player: new Player('Herman', 'XXXX', '1', false),
+        output: "balls"
+      },
+      {
+        player: new Player('Iris', 'XXXX', '1', false),
+        output: "..."
+      }
+    ]
+  }
+  
 
   return (
     <div className="container">
