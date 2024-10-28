@@ -107,13 +107,13 @@ export default class GameService {
     }
     this.connectionService.broadcastToHost(relayAnswerMessage, hostSocket)
   }
-  display(text: string, time: number, hostSocket: HostWebSocket) {
+  display(text: string, ISOString: string, hostSocket: HostWebSocket) {
     const displayMessage: BroadcastMessage = {
       event: "display",
       text: text,
-      time: time,
+      time: ISOString,
     }
-    console.log(`displaying ${text} for ${time} seconds`)
+    console.log(`displaying ${text} until ${ISOString}s`)
     this.connectionService.broadcastToHost(displayMessage, hostSocket)
   }
   getGameLoopInstanceFromRoomcode(roomcode: string): GameLoop {

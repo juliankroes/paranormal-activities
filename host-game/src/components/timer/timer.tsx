@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react'
 
-const Timer: React.FC<{ duration: number }> = ({ duration }) => {
-  const [timeLeft, setTimeLeft] = useState(duration)
+// FIXME: keeps waiting for like 5 seconds after timer is finished
+const Timer: React.FC<{ endTime: Date }> = ({ endTime }) => {
+  const [timeLeft, setTimeLeft] = useState<number>()
 
   useEffect(() => {
-    setTimeLeft(duration)
+    const endTimeSeconds = Math.floor((endTime.getTime() - new Date().getTime()) / 1000)
+    setTimeLeft(endTimeSeconds)
   
-    if (duration > 0) {
-      const timerId = setInterval(() => {
-        setTimeLeft(prev => prev - 1)
-      }, 1000)
+    const timerId = setInterval(() => {
+      setTimeLeft(prev => (prev && prev > 0 ? prev - 1 : 0))
+    }, 1000)
   
-      return () => clearInterval(timerId)
-    }
-  }, [duration])
+    return () => clearInterval(timerId)
+  }, [endTime])
+  
 
   return (
     <div>
@@ -22,7 +23,7 @@ const Timer: React.FC<{ duration: number }> = ({ duration }) => {
       <path d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64l.012-.013.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5M8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3"/>
       </svg>
       &nbsp;
-      {timeLeft > 0 ? timeLeft : 'Time is up!'}
+      {timeLeft! > 0 ? timeLeft : 'Time is up!'}
     </div>)
 }
 

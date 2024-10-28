@@ -16,7 +16,7 @@ const backendUrl = "ws://localhost:8080";
 function App() {
   const [room, setRoom] = useState<Room | null>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [time, setTime] = useState<number | null>(null)
+  const [endTime, setEndTime] = useState<Date | null>(null)
   const [text, setText] = useState<string>('nothing')
 
   const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(
@@ -43,8 +43,8 @@ function App() {
         setRoom(new Room(messageData.room.roomcode, messageData.room.playerList, messageData.room.deviceId));  
       }
       if (messageData.event == 'display') {
-        setTime(null)
-        setTime(messageData.time!)
+        setEndTime(null)
+        setEndTime(new Date(messageData.time!))
         setText(messageData.text!)
       }
     }
@@ -72,7 +72,7 @@ function App() {
             } />
           <Route path="/game" index element={
             room
-            ? <Game room={room} text={text} time={time} />
+            ? <Game room={room} text={text} endTime={endTime} />
             : <h1>no room joined</h1>
           } />
         </Routes>

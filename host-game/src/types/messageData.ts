@@ -9,6 +9,6 @@ export default interface MessageData {
     details?: string;
     message?: string;
     placeholder?: string;
-    time?: number;
+    time?: string;
     text?: string;
   }

@@ -24,4 +24,8 @@ export default class FormattingService {
   mapToPlayerNames(map: Map<string, Player>): string[] {
     return Array.from(map.values()).map((player) => player.name)
   }
+  secondsToEndTime(seconds: number): string {
+    const now: Date = new Date(new Date().getTime() + (seconds * 1000))
+    return now.toISOString()
+  }
 }

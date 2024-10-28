@@ -49,7 +49,7 @@ export default class GameLoop {
   private async explanation(durationSeconds: number, players: Player[]) {
     this.gameService.display(
       "[explanation here]",
-      durationSeconds,
+      this.formattingService.secondsToEndTime(durationSeconds),
       this.hostWebSocket,
     )
     this.gameService.informativeMessage(
@@ -62,11 +62,16 @@ export default class GameLoop {
   private async voteMedium(durationSeconds: number, players: Player[]): Promise<Player> {
     this.gameService.display(
       "vote for who should be the medium",
-      durationSeconds,
+      this.formattingService.secondsToEndTime(durationSeconds),
       this.hostWebSocket,
     )
     this.gameService.votePlayerMessage(players, this.room.roomcode)
     await this.startTimer(durationSeconds)
+    const votedPlayer = await Promise.race([
+      
+      this.startTimer(durationSeconds),
+    ])
+
     const playerEntry = this.room.playerList.entries().next()
     if (!playerEntry.done) {
       const [, player] = playerEntry.value
@@ -79,7 +84,7 @@ export default class GameLoop {
   private async mediumAnswerPrompt(durationSeconds: number, medium: Player): Promise<string> {
     this.gameService.display(
       `${medium.name}, fill in the blank of the question on your device`,
-      durationSeconds,
+      this.formattingService.secondsToEndTime(durationSeconds),
       this.hostWebSocket,
     )
     const randomPrompt: string = await this.promptService.getRandomPrompt()
@@ -98,7 +103,7 @@ export default class GameLoop {
     ])
 
     if (result === "timeout") {
-        // TODO: retrieve input
+        // TODO: retrieve input if not in time
         console.log("player did not answer in time")
         this.gameService.clear(this.room.roomcode, [medium.name])
     } else { 
@@ -121,7 +126,7 @@ export default class GameLoop {
   ) {
     this.gameService.display(
       "Spirits answer the prompt on your device together",
-      durationSeconds,
+      this.formattingService.secondsToEndTime(durationSeconds),
       this.hostWebSocket,
     )
     const output: CollaborativeOutput = CollaborativeOutputUtils.fromPlayers(prompt, spirits)
@@ -149,4 +154,5 @@ export default class GameLoop {
       this.inputResolvers[medium.name] = resolve
     })
   }
+
 }
