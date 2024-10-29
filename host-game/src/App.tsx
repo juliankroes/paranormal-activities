@@ -63,7 +63,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="" index element={<Titlescreen />} />
-          <Route path="/settings" index element={<Settings />} />
+          <Route path="/settings" index element={<Settings musicHandler={playAudio} />} />
           <Route path="/lobby" index element={
             <Lobby 
               sendMessage={sendMessage} 
