@@ -9,6 +9,7 @@ import Room from './models/Room.model';
 import MessageData from './types/messageData';
 import Game from './pages/game/game';
 import { getDeviceId } from './pages/utils/deviceUtils';
+import Info from './pages/info/Info';
 
 
 const backendUrl = "ws://localhost:8080";
@@ -75,6 +76,7 @@ function App() {
             ? <Game room={room} text={text} endTime={endTime} />
             : <h1>no room joined</h1>
           } />
+          <Route path="/info" index element={<Info />} />
         </Routes>
       </BrowserRouter>
       <audio ref={audioRef} src={music} loop />
