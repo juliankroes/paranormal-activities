@@ -7,6 +7,7 @@ import { HostWebSocket } from "../types/hostWebSocket.ts"
 import {
   AnswerMessage,
   ClearMessage,
+  CollaborativeAnswerMessage,
   InformativeMessage,
   InputMessage,
   StartGameMessage,
@@ -14,8 +15,7 @@ import {
 } from "../types/messages.ts"
 import { PlayerWebSocket } from "../types/userWebSocket.ts"
 // TODO: export redundant GameController code to a service
-export default class GameController {
-  
+export default class GameController {  
   gameService: GameService
   connectionService: ConnectionService
   constructor() {
@@ -63,6 +63,11 @@ export default class GameController {
     const gameLoop: GameLoop = this.gameService.getGameLoopInstanceFromRoomcode(
       connectedGamecode,
     )
-    
+    gameLoop.handleVoteAnswer(data.playerName)
+  }
+  collaborativeAnswer(data: CollaborativeAnswerMessage, playerWebSocket: PlayerWebSocket) {
+    const connectedGameCode: string = playerWebSocket.player.connectedGameCode
+    const gameLoop: GameLoop = this.gameService.getGameLoopInstanceFromRoomcode(connectedGameCode)
+    gameLoop.handleCollaborativeAnswer(playerWebSocket.player.name, data.answer)
   }
 }

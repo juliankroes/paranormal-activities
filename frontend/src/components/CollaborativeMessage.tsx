@@ -6,7 +6,7 @@ interface CollaborativeMessageProps {
 
 const collaborativeMessage: React.FC<CollaborativeMessageProps> = ({collaborativeOutput}) => {
     return (
-        <div className="d-inline-flex justify-content-evenly coll-message-container">
+        <div className="d-inline-flex justify-content-center coll-message-container">
             {collaborativeOutput.fullOutput.map(({ player, output }, index) => (
             <div key={index} className="d-inline-flex flex-column">
                 <span className="badge bg-secondary">{player.name}</span> 

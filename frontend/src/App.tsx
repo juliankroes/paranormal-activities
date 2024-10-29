@@ -68,6 +68,10 @@ export const App: React.FC = () => {
     console.log(`sending: ${playerName}`)
     sendMessage(JSON.stringify({event: "vote-answer", playerName: playerName}))
   }
+  const collabAnswerHandler = (answer: string) => {
+    console.log(`sending ${JSON.stringify({event: "collaborative-answer", answer: answer})}`)
+    sendMessage(JSON.stringify({event: "collaborative-answer", answer: answer}))
+  }
 
   // switch satement with all possible messages from backend
   useEffect(() => {
@@ -110,8 +114,7 @@ export const App: React.FC = () => {
           case "collaborative-input-message":
             const collaborativeOutput: CollaborativeOutput = messageData.output!
             setGameComponent(
-              <CollaborativeInput collaborativeOutput={collaborativeOutput} onSubmit={function (answer: string): void {
-                throw new Error("Function not implemented.")}}></CollaborativeInput>
+              <CollaborativeInput collaborativeOutput={collaborativeOutput} onSubmit={collabAnswerHandler}></CollaborativeInput>
             )
             break;
           case "clear":

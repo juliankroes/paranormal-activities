@@ -117,7 +117,6 @@ export default class ConnectionService {
       throw new TypeError("playerNames must be a valid array")
     }
 
-    this.logPlayers(roomcode)
     const room = this.connectedPlayers.get(roomcode)
 
     if (!room) {

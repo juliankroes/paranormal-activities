@@ -3,19 +3,24 @@ import { Player } from "../models/player.model.ts"
 import { Room } from "../models/room.model.ts"
 import { CollaborativeOutput, CollaborativeOutputUtils } from "../types/collaborativeOutput.ts"
 import { HostWebSocket } from "../types/hostWebSocket.ts"
+import { CollaborativeAnswerMessage } from "../types/messages.ts"
 import ConnectionService from "./connectionService.ts"
 import FormattingService from "./formattingService.ts"
 import GameService from "./gameService.ts"
+import InputResolverService from "./inputResolverService.ts"
 import PromptService from "./promptService.ts"
 import RoomService from "./roomService.ts"
 
 export default class GameLoop {
+
   // services
   private gameService: GameService
   private connectionService: ConnectionService
   private roomService: RoomService
   private promptService: PromptService
   private formattingService: FormattingService
+  private inputResolverService: InputResolverService 
+
 
   // globals
   private room: Room
@@ -27,6 +32,7 @@ export default class GameLoop {
     this.promptService = new PromptService()
     this.connectionService = ConnectionService.getInstance()
     this.formattingService = new FormattingService()
+    this.inputResolverService = new InputResolverService()
 
     this.room = this.roomService.getRoomByCode(roomcode)
     this.hostWebSocket = this.connectionService.connectedHosts.get(roomcode)!
@@ -37,13 +43,15 @@ export default class GameLoop {
     const players: Player[] = [...this.room.playerList.values()]
     await this.explanation(7, players)
     const medium: Player = await this.voteMedium(15, players)
+    await this.quickDisplay(`${medium.name} has been voted to be the medium`, 8)
     const spirits: Player[] = players.filter((player) => player !== medium) // remove medium from player list
     const question: string = await this.mediumAnswerPrompt(15, medium, spirits)
-    await this.spiritsAnswerPrompt(30, spirits, question)
-    // displayEncounter(20)
-    // mediumInterperatesEncounter(20)
-    // displayInterpertation(20)
-    // rankResponses
+    const answers: string[] = await this.spiritsAnswerPrompt(30, spirits, question)
+    const combinedAnswers: string = answers.join(' ')
+    await this.quickDisplay(question, 10)
+    await this.quickDisplay(combinedAnswers, 10)
+    await this.quickDisplay("What could the meaning of this strange message be?", 10)
+    const interpertation: string = await this.mediumAnswerPrompt(20, medium, spirits)
   }
 
   private async explanation(durationSeconds: number, players: Player[]) {
@@ -59,7 +67,6 @@ export default class GameLoop {
     await this.startTimer(durationSeconds)
 
   }
-
   // TODO: end timer when everyone has voted
   private async voteMedium(durationSeconds: number, players: Player[]): Promise<Player> {
     this.gameService.display(
@@ -68,8 +75,12 @@ export default class GameLoop {
       this.hostWebSocket,
     )
     this.gameService.votePlayerMessage(players, this.room.roomcode)
-    await this.startTimer(durationSeconds)
-    // const votedPlayer = await Promise.race([this.startTimer(durationSeconds)])
+
+    const result = await Promise.race([
+      this.startTimer(durationSeconds),
+      this.waitForVotes(players)
+    ])
+    console.log(result)
 
     const playerEntry = this.room.playerList.entries().next()
     if (!playerEntry.done) {
@@ -127,36 +138,59 @@ export default class GameLoop {
     durationSeconds: number,
     spirits: Player[],
     prompt: string
-  ) {
+  ): Promise<string[]> {
     this.gameService.display(
       "Spirits answer the prompt on your device together",
       this.formattingService.secondsToEndTime(durationSeconds),
       this.hostWebSocket,
     )
-    const output: CollaborativeOutput = CollaborativeOutputUtils.fromPlayers(prompt, spirits)
-    this.gameService.collaborativeInputMessage(output,'do your part', this.room.roomcode)
+    
+    const output = CollaborativeOutputUtils.fromPlayers(prompt, spirits)
+    this.gameService.collaborativeInputMessage(output, 'do your part', this.room.roomcode)
+  
+    // Wait for the responses or until the timer ends
+    const fullOutput = await this.waitForCollaborativeInput(spirits, prompt, durationSeconds)
+  
+    return fullOutput.fullOutput.map(entry => entry.output)
+  }
+  private async quickDisplay(message: string, durationSeconds: number) {
+    this.gameService.display(
+      message,
+      this.formattingService.secondsToEndTime(durationSeconds),
+      this.hostWebSocket,
+    )
     await this.startTimer(durationSeconds)
   }
-
+  
   private startTimer(durationSeconds: number): Promise<"timeout"> {
     return new Promise((resolve) => {
       setTimeout(() => resolve("timeout"), durationSeconds * 1000)
     })
   }
 
-  private inputResolvers: { [playerName: string]: (input: string) => void } = {}
+  waitForPlayerInput(medium: Player): Promise<string> {
+    return this.inputResolverService.waitForPlayerInput(medium.name)
+  }
 
   handlePlayerInput(playerName: string, input: string) {
-    if (this.inputResolvers[playerName]) {
-      this.inputResolvers[playerName](input)
-      delete this.inputResolvers[playerName]
-    }
+    this.inputResolverService.handlePlayerInput(playerName, input)
   }
 
-  waitForPlayerInput(medium: Player): Promise<string> {
-    return new Promise((resolve) => {
-      this.inputResolvers[medium.name] = resolve
-    })
+  waitForCollaborativeInput(spirits: Player[], prompt: string, durationSeconds: number): Promise<CollaborativeOutput> {
+    return this.inputResolverService.waitForCollaborativeInput(spirits, prompt, durationSeconds)
   }
 
+  handleCollaborativeAnswer(name: string, answer: string) {
+    this.inputResolverService.handleCollaborativeAnswer(name, answer)
+  }
+
+  waitForVotes(players: Player[]): Promise<string> {
+    const winningPlayerName: Promise<string> = this.inputResolverService.waitForVotes(players)
+    return winningPlayerName
+  }
+
+  handleVoteAnswer(playerName: string) {
+    console.log(`+ one vote for ${playerName}`)
+    this.inputResolverService.handleVoteAnswer(playerName)
+  }
 }

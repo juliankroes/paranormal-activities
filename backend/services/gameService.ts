@@ -22,7 +22,6 @@ export default class GameService {
     const playerSockets: PlayerWebSocket[] = this.connectionService
       .getPlayerSocketsFromNameArray(playerNames, roomcode)
 
-    console.log(`message: ${message} for players ${playerNames}`)
     const infoMessage: BroadcastMessage = {
       event: "informative-message",
       message: message,
@@ -69,7 +68,6 @@ export default class GameService {
       placeholder: placeholder
     }
     this.connectionService.broadcastToPlayers(playerSockets, colInputMessage)
-
   }
   answerMessage(answer: string, playerWebSocket: PlayerWebSocket) {
     const answerMessage: BroadcastMessage = {
@@ -113,7 +111,6 @@ export default class GameService {
       text: text,
       time: ISOString,
     }
-    console.log(`displaying ${text} until ${ISOString}s`)
     this.connectionService.broadcastToHost(displayMessage, hostSocket)
   }
   getGameLoopInstanceFromRoomcode(roomcode: string): GameLoop {
