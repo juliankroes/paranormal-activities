@@ -59,6 +59,8 @@ export default class GameLoop {
     await this.startTimer(durationSeconds)
 
   }
+
+  // TODO: end timer when everyone has voted
   private async voteMedium(durationSeconds: number, players: Player[]): Promise<Player> {
     this.gameService.display(
       "vote for who should be the medium",
