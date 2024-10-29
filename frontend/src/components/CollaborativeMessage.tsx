@@ -11,11 +11,9 @@ const collaborativeMessage: React.FC<CollaborativeMessageProps> = ({collaborativ
             <div key={index} className="d-inline-flex flex-column">
                 <span className="badge bg-secondary">{player.name}</span> 
                 <span>
-                {output}
+                {output == '' ? '...' : output}
                 </span>
             </div>
-            
-            
             ))}
         </div>
     )

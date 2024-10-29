@@ -9,6 +9,9 @@ import InputMessage from "./components/InputMessage.tsx";
 import VoteComponent from "./components/VoteComponent.tsx";
 import CollaborativeInput from "./components/CollaborativeInput.tsx";
 import Player from "./models/Player.model.ts";
+import collaborativeMessage from "./components/CollaborativeMessage.tsx";
+import CollaborativeMessage from "./components/CollaborativeMessage.tsx";
+import { CollaborativeOutput } from "./types/collaborativeOutput.ts";
 
 enum GameState {
   Joining,
@@ -104,6 +107,13 @@ export const App: React.FC = () => {
                 onSubmit={voteHandler}>
               </VoteComponent>)
               break
+          case "collaborative-input-message":
+            const collaborativeOutput: CollaborativeOutput = messageData.output!
+            setGameComponent(
+              <CollaborativeInput collaborativeOutput={collaborativeOutput} onSubmit={function (answer: string): void {
+                throw new Error("Function not implemented.")}}></CollaborativeInput>
+            )
+            break;
           case "clear":
             setGameComponent(null)
             break
@@ -118,7 +128,7 @@ export const App: React.FC = () => {
     }
   }, [lastMessage]);
 
-  const sampleOutput = {
+  const sampleOutput: CollaborativeOutput = {
     prompt: "Why are the spirits drawn to my awesome outfit?",
     fullOutput: [
       {

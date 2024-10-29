@@ -26,7 +26,11 @@ const CollaborativeInput: React.FC<collaborativeInputProps> = (props) => {
     }
     if (answerSubmitted) {
         return (
-            <p>you subitted {answer}</p>
+            <>
+                <label htmlFor="submit" className="form-label">{props.collaborativeOutput.prompt}</label>
+                <CollaborativeMessage collaborativeOutput={props.collaborativeOutput}></CollaborativeMessage>
+            </>
+            
         )
     }
     return (

@@ -69,10 +69,7 @@ export default class GameLoop {
     )
     this.gameService.votePlayerMessage(players, this.room.roomcode)
     await this.startTimer(durationSeconds)
-    const votedPlayer = await Promise.race([
-      
-      this.startTimer(durationSeconds),
-    ])
+    // const votedPlayer = await Promise.race([this.startTimer(durationSeconds)])
 
     const playerEntry = this.room.playerList.entries().next()
     if (!playerEntry.done) {
