@@ -11,7 +11,9 @@ import Game from './pages/game/game';
 import Info from './pages/info/Info';
 
 
-const backendUrl = "https://paranormal-backend.deno.dev";
+import Environment from "../../Environment.ts"
+const environment: Environment = new Environment()
+const backendUrl = environment.BACKEND_URL
 
 function App() {
   const [room, setRoom] = useState<Room | null>(null)

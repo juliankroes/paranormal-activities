@@ -16,8 +16,11 @@ enum GameState {
   Reconnecting,
   End 
 }
+import Environment from "../../Environment.ts"
+const environment: Environment = new Environment()
+const backendUrl = environment.BACKEND_URL
 
-const backendUrl = "https://paranormal-backend.deno.dev";
+// const backendUrl = "https://paranormal-backend.deno.dev";
 // const socketConnection = new WebSocket(backendUrl + "/start_web_socket");
 
 export const App: React.FC = () => {
