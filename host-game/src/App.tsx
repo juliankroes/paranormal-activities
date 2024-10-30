@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useWebSocket from "react-use-websocket";
 import Titlescreen from './pages/titlescreen/titlescreen';
 import Settings from './pages/settings/settings';
@@ -8,7 +8,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Room from './models/Room.model';
 import MessageData from './types/messageData';
 import Game from './pages/game/game';
-import { getDeviceId } from './pages/utils/deviceUtils';
 import Info from './pages/info/Info';
 
 
@@ -20,7 +19,7 @@ function App() {
   const [endTime, setEndTime] = useState<Date | false>(false)
   const [text, setText] = useState<string>('nothing')
 
-  const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(
+  const { sendMessage, lastMessage } = useWebSocket(
     backendUrl + "/start_host_web_socket",
     {
       share: true,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import Room from "../../models/Room.model"
 import Timer from "../../components/timer/timer"
 import { useNavigate } from "react-router-dom"

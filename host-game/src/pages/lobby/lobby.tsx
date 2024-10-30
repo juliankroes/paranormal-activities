@@ -1,12 +1,11 @@
 import logo from '../../assets/images/paranormal-logo.png';
 import { motion } from "framer-motion";
 import './lobby.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Room from '../../models/Room.model';
 import { Link, useNavigate } from 'react-router-dom';
 import PlayerList from '../../components/playerList/PlayerList'
 import { SendMessage } from 'react-use-websocket';
-import { getPlayerNameList } from '../utils/playerUtils'
 import { getDeviceId } from '../utils/deviceUtils';
 
 type LobbyProps = {
@@ -15,7 +14,7 @@ type LobbyProps = {
   setRoom: React.Dispatch<React.SetStateAction<Room | null>>
 }
 
-const Lobby: React.FC<LobbyProps> = ({ sendMessage, room, setRoom }) => {
+const Lobby: React.FC<LobbyProps> = ({ sendMessage, room }) => {
   const navigate = useNavigate()
   const hover = {
     y: [-15, -35, 0, -30, 0, -15],
