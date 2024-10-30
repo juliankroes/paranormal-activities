@@ -17,7 +17,7 @@ const backendUrl = "ws://localhost:8080";
 function App() {
   const [room, setRoom] = useState<Room | null>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [endTime, setEndTime] = useState<Date | null>(null)
+  const [endTime, setEndTime] = useState<Date | false>(false)
   const [text, setText] = useState<string>('nothing')
 
   const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(
@@ -44,8 +44,11 @@ function App() {
         setRoom(new Room(messageData.room.roomcode, messageData.room.playerList, messageData.room.deviceId));  
       }
       if (messageData.event == 'display') {
-        setEndTime(null)
-        setEndTime(new Date(messageData.time!))
+        if (messageData.time) {
+          setEndTime(new Date(messageData.time!))
+        } else {
+          setEndTime(false)
+        }
         setText(messageData.text!)
       }
     }

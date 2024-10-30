@@ -34,6 +34,7 @@ export default class InputResolverService {
     }
   }
 
+  // TODO: should also send the update to unsubmitted players
   async waitForCollaborativeInput(
     spirits: Player[],
     prompt: string,
@@ -54,30 +55,24 @@ export default class InputResolverService {
             spirit.connectedGameCode
           )
   
-          resolve() // resolve this specific response after processing
+          resolve()
         }
       })
     )
   
-    // Await either all responses or timeout, whichever comes first
     await Promise.race([
-      Promise.all(responsePromises), // all responses arrive
-      this.startTimer(durationSeconds) // or timer expires
+      Promise.all(responsePromises),
+      this.startTimer(durationSeconds)
     ])
   
     return fullOutput
   }
-  
-  
-  
-
   handleVoteAnswer(playerName: string) {
     if (this.voteResolvers[playerName]) {
       this.voteResolvers[playerName](playerName)
       delete this.voteResolvers[playerName]
     }
   }
-
   waitForVotes(players: Player[]): Promise<string> {
     const voteCounts: { [playerName: string]: number } = {}
   

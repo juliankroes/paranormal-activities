@@ -52,6 +52,8 @@ export default class GameLoop {
     await this.quickDisplay(combinedAnswers, 10)
     await this.quickDisplay("What could the meaning of this strange message be?", 10)
     const interpertation: string = await this.mediumAnswerPrompt(20, medium, spirits)
+    await this.quickDisplay(interpertation, 10)
+    await this.quickDisplay("thank you all for playing!", 10)
   }
 
   private async explanation(durationSeconds: number, players: Player[]) {
@@ -91,6 +93,8 @@ export default class GameLoop {
     }
     throw new Error("No player found")
   }
+
+  // TODO: prompt should be an argument
   private async mediumAnswerPrompt(durationSeconds: number, medium: Player, spirits: Player[]): Promise<string> {
     this.gameService.display(
       `${medium.name}, fill in the blank of the question on your device`,
@@ -156,7 +160,7 @@ export default class GameLoop {
   private async quickDisplay(message: string, durationSeconds: number) {
     this.gameService.display(
       message,
-      this.formattingService.secondsToEndTime(durationSeconds),
+      false,
       this.hostWebSocket,
     )
     await this.startTimer(durationSeconds)

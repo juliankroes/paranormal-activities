@@ -105,7 +105,7 @@ export default class GameService {
     }
     this.connectionService.broadcastToHost(relayAnswerMessage, hostSocket)
   }
-  display(text: string, ISOString: string, hostSocket: HostWebSocket) {
+  display(text: string, ISOString: string | false, hostSocket: HostWebSocket) {
     const displayMessage: BroadcastMessage = {
       event: "display",
       text: text,

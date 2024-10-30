@@ -7,7 +7,7 @@ import { motion } from "framer-motion"
 
 interface gameProps {
     room: Room,
-    endTime: Date | null,
+    endTime: Date | false,
     text: string
 }
 const Game: React.FC<gameProps> = (props) => {
