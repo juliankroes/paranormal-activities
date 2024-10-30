@@ -17,7 +17,7 @@ enum GameState {
   End 
 }
 
-const backendUrl = "ws://localhost:8080";
+const backendUrl = "https://paranormal-backend.deno.dev";
 // const socketConnection = new WebSocket(backendUrl + "/start_web_socket");
 
 export const App: React.FC = () => {

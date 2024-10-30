@@ -11,7 +11,7 @@ import Game from './pages/game/game';
 import Info from './pages/info/Info';
 
 
-const backendUrl = "ws://localhost:8080";
+const backendUrl = "https://paranormal-backend.deno.dev";
 
 function App() {
   const [room, setRoom] = useState<Room | null>(null)
