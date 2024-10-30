@@ -13,6 +13,7 @@
     "bootstrap": "bootstrap"
   },
   "dependencies": {
+    "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "framer-motion": "^11.9.0",
     "react": "^18.3.1",
