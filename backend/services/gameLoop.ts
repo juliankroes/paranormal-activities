@@ -43,10 +43,10 @@ export default class GameLoop {
     this.room.allowQuit = false
 
     const players: Player[] = [...this.room.playerList.values()]
-    await this.explanation(7, players)
+    await this.explanation(10, players)
 
-    const medium: Player = await this.voteMedium(15, players)
-    await this.quickDisplay(`${medium.name} has been voted to be the medium`, 8)
+    const medium: Player = await this.voteMedium(20, players)
+    await this.quickDisplay(`${medium.name} has been voted to be the medium`, 6)
     const spirits: Player[] = players.filter((player) => player !== medium)
     const randomPrompt: string = await this.promptService.getRandomPrompt()
 
@@ -55,9 +55,9 @@ export default class GameLoop {
     const combinedAnswers: string = answers.join(' ')
     await this.quickDisplay(question, 10)
     await this.quickDisplay(combinedAnswers, 10)
-    await this.quickDisplay("What could the meaning of this strange message be?", 10)
+    await this.quickDisplay("What could the meaning of this strange message be?", 6)
 
-    const interpertation: string = await this.mediumAnswerPrompt(20, medium, spirits, `What is the meaning of "${combinedAnswers}"`)
+    const interpertation: string = await this.question(20, medium, `What is the meaning of "${combinedAnswers}"`)
     await this.quickDisplay(interpertation, 10)
     await this.quickDisplay("thank you all for playing!", 10)
   }
@@ -144,6 +144,37 @@ export default class GameLoop {
     return prompt
     
   }
+  private async question(durationSeconds: number, targetPlayer: Player, prompt: string): Promise<string> {
+    this.gameService.display(
+      `${targetPlayer.name}, fill in the blank of the question on your device`,
+      this.formattingService.secondsToEndTime(durationSeconds),
+      this.hostWebSocket,
+    )
+    const placeholder: string = "fill in the blank"
+
+    this.gameService.inputMessage(
+      prompt,
+      placeholder,
+      this.room.roomcode,
+      [targetPlayer.name],
+    )
+
+    const result = await Promise.race([
+      this.waitForPlayerInput(targetPlayer),
+      this.startTimer(durationSeconds),
+    ])
+
+    if (result === "timeout") {
+        // TODO: retrieve input if not in time
+        console.log("player did not answer in time")
+        this.gameService.clear(this.room.roomcode, [targetPlayer.name])
+    } else { 
+        console.log(result)
+        return result
+    }
+    return "No answer"
+    
+  }
   private async spiritsAnswerPrompt(
     durationSeconds: number,
     spirits: Player[],
@@ -155,8 +186,8 @@ export default class GameLoop {
       this.hostWebSocket,
     )
     
-    const output = CollaborativeOutputUtils.fromPlayers(prompt, spirits)
-    this.gameService.collaborativeInputMessage(output, 'do your part', this.room.roomcode)
+    const output: CollaborativeOutput = {prompt: prompt, fullOutput:[]}
+    this.gameService.collaborativeInputMessage(output, 'do your part', this.room.roomcode, spirits)
   
     // Wait for the responses or until the timer ends
     const fullOutput = await this.waitForCollaborativeInput(spirits, prompt, durationSeconds)

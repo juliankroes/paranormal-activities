@@ -40,19 +40,28 @@ export default class InputResolverService {
     prompt: string,
     durationSeconds: number
   ): Promise<CollaborativeOutput> {
-    const fullOutput: CollaborativeOutput = { prompt, fullOutput: [] }
+    const collaborativeOutput: CollaborativeOutput = { prompt, fullOutput: [] }
   
+    this.gameService.collaborativeInputMessage(
+        collaborativeOutput,
+        'Add to what your fellow spirits came up with',
+        spirits[0].connectedGameCode,
+        spirits
+    )
+    
+
     const responsePromises = spirits.map(spirit =>
       new Promise<void>(resolve => {
         this.collaborativeResolvers[spirit.name] = (answer) => {
           // Add each player's answer to the fullOutput
-          fullOutput.fullOutput.push({ player: spirit, output: answer })
+          collaborativeOutput.fullOutput.push({ player: spirit, output: answer })
   
           // Send the updated output to all players
           this.gameService.collaborativeInputMessage(
-            fullOutput,
+            collaborativeOutput,
             'Add to what your fellow spirits came up with',
-            spirit.connectedGameCode
+            spirit.connectedGameCode,
+            spirits
           )
   
           resolve()
@@ -65,7 +74,7 @@ export default class InputResolverService {
       this.startTimer(durationSeconds)
     ])
   
-    return fullOutput
+    return collaborativeOutput
   }
   handleVoteAnswer(playerName: string) {
     if (this.voteResolvers[playerName]) {

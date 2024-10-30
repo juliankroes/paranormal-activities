@@ -56,8 +56,8 @@ export default class GameService {
 
     this.connectionService.broadcastToPlayers(playerSockets, votingMessage)
   }
-  collaborativeInputMessage(output: CollaborativeOutput, placeholder:string, roomcode: string) {
-    const playerNameList: string[] = CollaborativeOutputUtils.getPlayerNameList(output)
+  collaborativeInputMessage(output: CollaborativeOutput, placeholder:string, roomcode: string, spirits: Player[]) {
+    const playerNameList: string[] = this.formattingService.playerListToStringList(spirits)
     const playerSockets: PlayerWebSocket[] = this.connectionService.getPlayerSocketsFromNameArray(
       playerNameList,
       roomcode,
