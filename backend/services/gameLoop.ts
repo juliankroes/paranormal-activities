@@ -40,18 +40,23 @@ export default class GameLoop {
 
 
   public async main() {
+    this.room.allowQuit = false
+
     const players: Player[] = [...this.room.playerList.values()]
     await this.explanation(7, players)
+
     const medium: Player = await this.voteMedium(15, players)
     await this.quickDisplay(`${medium.name} has been voted to be the medium`, 8)
-    const spirits: Player[] = players.filter((player) => player !== medium) // remove medium from player list
+    const spirits: Player[] = players.filter((player) => player !== medium)
     const randomPrompt: string = await this.promptService.getRandomPrompt()
+
     const question: string = await this.mediumAnswerPrompt(15, medium, spirits, randomPrompt)
     const answers: string[] = await this.spiritsAnswerPrompt(30, spirits, question)
     const combinedAnswers: string = answers.join(' ')
     await this.quickDisplay(question, 10)
     await this.quickDisplay(combinedAnswers, 10)
     await this.quickDisplay("What could the meaning of this strange message be?", 10)
+
     const interpertation: string = await this.mediumAnswerPrompt(20, medium, spirits, `What is the meaning of "${combinedAnswers}"`)
     await this.quickDisplay(interpertation, 10)
     await this.quickDisplay("thank you all for playing!", 10)

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Player from "../models/Player.model";
 
 interface InputMessageProps {
   message: string;

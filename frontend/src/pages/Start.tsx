@@ -15,7 +15,7 @@ const Start: React.FC<StartProps> = (props) => {
   const [roomcode, setRoomCode] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [validRoomcode, setValidRoomcode] = useState<boolean>(false);
-  const [validName, setValidName] = useState<boolean>(false);
+  const [_validName, setValidName] = useState<boolean>(false);
 
   const [nameCharacterAmount, setNameCharacterAmount] = useState<number>(0);
 

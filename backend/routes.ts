@@ -6,6 +6,9 @@ import RoomController from "./controllers/roomController.ts"
 import { PlayerWebSocket } from "./types/userWebSocket.ts"
 import { HostWebSocket } from "./types/hostWebSocket.ts"
 import GameController from "./controllers/gameController.ts"
+import FormattingService from "./services/formattingService.ts"
+import ConnectionService from "./services/connectionService.ts"
+import GameService from "./services/gameService.ts"
 
 const app: Application = new Application()
 const port: number = 8080
@@ -14,6 +17,7 @@ const router: Router = new Router()
 const connectionController: ConnectionController = new ConnectionController()
 const roomController: RoomController = new RoomController()
 const gameController: GameController = new GameController()
+const gameService: GameService = new GameService()
 
 enum MessageType {
   StartGame = "start-game",

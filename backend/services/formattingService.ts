@@ -3,7 +3,7 @@ import { PlayerWebSocket } from "../types/userWebSocket.ts"
 import ConnectionService from "./connectionService.ts"
 
 export default class FormattingService {
-  connectionService: ConnectionService
+  private connectionService: ConnectionService
   constructor() {
     this.connectionService = ConnectionService.getInstance()
   }

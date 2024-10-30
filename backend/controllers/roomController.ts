@@ -61,11 +61,13 @@ export default class RoomController {
   }
 
   leaveRoom(socket: PlayerWebSocket) {
-    this.roomService.removePlayerFromRoom(socket.player)
     const room: Room = this.roomService.getRoomByCode(
       socket.player.connectedGameCode,
     )
-    this.connectionService.broadcastGameInformation(room)
+    if (room.allowQuit) {
+      this.roomService.removePlayerFromRoom(socket.player)
+      this.connectionService.broadcastGameInformation(room)
+    }
   }
 
   private broadcastErrorToPlayer(details: string, socket: PlayerWebSocket) {

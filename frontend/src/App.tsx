@@ -8,9 +8,6 @@ import Start from "./pages/Start.tsx";
 import InputMessage from "./components/InputMessage.tsx";
 import VoteComponent from "./components/VoteComponent.tsx";
 import CollaborativeInput from "./components/CollaborativeInput.tsx";
-import Player from "./models/Player.model.ts";
-import collaborativeMessage from "./components/CollaborativeMessage.tsx";
-import CollaborativeMessage from "./components/CollaborativeMessage.tsx";
 import { CollaborativeOutput } from "./types/collaborativeOutput.ts";
 
 enum GameState {
@@ -25,11 +22,11 @@ const backendUrl = "ws://localhost:8080";
 
 export const App: React.FC = () => {
   const [gameState, setGameState] = useState(GameState.Joining);
-  const [room, setRoom] = useState<Room>();
+  const [_room, setRoom] = useState<Room>();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [informativeMessage, setInformativeMessage] = useState<string | null>(null);
+  const [informativeMessage, _setInformativeMessage] = useState<string | null>(null);
   const [gameComponent, setGameComponent] = useState<ReactNode | null>(<div>waiting for something interesting to happen</div>)
-  const { sendMessage, lastMessage, readyState, getWebSocket } = useWebSocket(
+  const { sendMessage, lastMessage } = useWebSocket(
     backendUrl + "/start_player_web_socket",
     {
       share: true,
@@ -132,47 +129,6 @@ export const App: React.FC = () => {
     }
   }, [lastMessage]);
 
-  const sampleOutput: CollaborativeOutput = {
-    prompt: "Why are the spirits drawn to my awesome outfit?",
-    fullOutput: [
-      {
-        player: new Player('Alice', 'XXXX', '1', false),
-        output: "Mystical"
-      },
-      {
-        player: new Player('Bob', 'XXXX', '1', false),
-        output: "can't resist"
-      },
-      {
-        player: new Player('Clair', 'XXXX', '1', false),
-        output: "..."
-      },
-      {
-        player: new Player('Dunce', 'XXXX', '1', false),
-        output: "Rizz"
-      },
-      {
-        player: new Player('Eve', 'XXXX', '1', false),
-        output: "that you"
-      },
-      {
-        player: new Player('Floris', 'XXXX', '1', false),
-        output: "radiate"
-      },
-      {
-        player: new Player('Gay tijn', 'XXXX', '1', false),
-        output: "..."
-      },
-      {
-        player: new Player('Herman', 'XXXX', '1', false),
-        output: "balls"
-      },
-      {
-        player: new Player('Iris', 'XXXX', '1', false),
-        output: "..."
-      }
-    ]
-  }
   
 
   return (
