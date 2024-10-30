@@ -45,13 +45,14 @@ export default class GameLoop {
     const medium: Player = await this.voteMedium(15, players)
     await this.quickDisplay(`${medium.name} has been voted to be the medium`, 8)
     const spirits: Player[] = players.filter((player) => player !== medium) // remove medium from player list
-    const question: string = await this.mediumAnswerPrompt(15, medium, spirits)
+    const randomPrompt: string = await this.promptService.getRandomPrompt()
+    const question: string = await this.mediumAnswerPrompt(15, medium, spirits, randomPrompt)
     const answers: string[] = await this.spiritsAnswerPrompt(30, spirits, question)
     const combinedAnswers: string = answers.join(' ')
     await this.quickDisplay(question, 10)
     await this.quickDisplay(combinedAnswers, 10)
     await this.quickDisplay("What could the meaning of this strange message be?", 10)
-    const interpertation: string = await this.mediumAnswerPrompt(20, medium, spirits)
+    const interpertation: string = await this.mediumAnswerPrompt(20, medium, spirits, `What is the meaning of "${combinedAnswers}"`)
     await this.quickDisplay(interpertation, 10)
     await this.quickDisplay("thank you all for playing!", 10)
   }
@@ -95,13 +96,13 @@ export default class GameLoop {
   }
 
   // TODO: prompt should be an argument
-  private async mediumAnswerPrompt(durationSeconds: number, medium: Player, spirits: Player[]): Promise<string> {
+  private async mediumAnswerPrompt(durationSeconds: number, medium: Player, spirits: Player[], mediumPrompt: string): Promise<string> {
     this.gameService.display(
       `${medium.name}, fill in the blank of the question on your device`,
       this.formattingService.secondsToEndTime(durationSeconds),
       this.hostWebSocket,
     )
-    const randomPrompt: string = await this.promptService.getRandomPrompt()
+    const prompt: string = mediumPrompt
     const placeholder: string = "fill in the blank"
 
     this.gameService.informativeMessage(
@@ -110,7 +111,7 @@ export default class GameLoop {
       this.formattingService.playerListToStringList(spirits)
     )
     this.gameService.inputMessage(
-      randomPrompt,
+      prompt,
       placeholder,
       this.room.roomcode,
       [medium.name],
@@ -128,14 +129,14 @@ export default class GameLoop {
     } else { 
         console.log(result)
         this.gameService.relayAnswerToHost(
-            randomPrompt,
+          prompt,
             result,
             this.hostWebSocket,
         )
-        const modifiedPrompt: string = randomPrompt.replace('____', result)
+        const modifiedPrompt: string = prompt.replace('____', result)
         return modifiedPrompt
     }
-    return randomPrompt
+    return prompt
     
   }
   private async spiritsAnswerPrompt(

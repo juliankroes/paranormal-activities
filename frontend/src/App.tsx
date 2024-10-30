@@ -99,6 +99,7 @@ export const App: React.FC = () => {
             break
           case "input-message":
             setGameComponent(<InputMessage 
+              key={messageData.message}
               onSubmit={answerHandler}
               placeholder={messageData.placeholder!} 
               message={messageData.message!}></InputMessage>)

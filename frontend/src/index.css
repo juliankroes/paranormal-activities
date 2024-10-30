@@ -33,6 +33,12 @@
     border-color: #f5d3dd;
 }
 
+.active {
+    color: #fff;
+    background-color: #d53c6a;
+    border-color: #d53c6a;
+}
+
 .alert-primary hr {
     border-top-color: #f1becd;
 }
