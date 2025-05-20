@@ -1,18 +1,18 @@
 ![paranormal activities logo](/documentation/paranormal-logo.png)
 Paranormal Activities is a multiplatform multiplayer game, inspired by different Jackbox games. Where players can answer prompts on a main screen my using their own phones.
 
-# game flow
+# Game flow
 The game flow for paranormal activities is as follows:
 
 ![flow diagram host](/documentation/flow-diagram-host.png)
 ![flow diagram game](/documentation/flow-diagram-game.png)
 
-# architecture
-- The host game uses react and is bundled with Electron.
+# Architecture
+- The host game uses react.
 - The phone web application uses a separate react app.
-- The backend uses Deno, and all the data is stored in memory so there is no database involved
+- The backend uses Deno, and all the data is stored in memory so there is no database involved.
 
-# user stories
+# User stories
 
 | User Story                                                                 | Type              | Priority |
 |----------------------------------------------------------------------------|-------------------|----------|
